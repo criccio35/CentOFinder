@@ -1,8 +1,8 @@
 * Written by Camila Riccio, Mauricio Peñuela, Camilo Rocha and Jorge Finke
 * Last update: 04/04/22 
 
-Workflow for condition-specific co-expression network analysis
---------------------------------------------------------------
+CentOFinder
+-----------
 
 This is a Python3 implementation to predict the centromere of rice chromosomes using CentO sequences.
 
@@ -11,7 +11,7 @@ Setup
 ------
 Clone the repository::
 
-  git clone git@github.com:criccio35/centromere_prediction.git
+  git clone git@github.com:criccio35/CentOFinder.git
 
 
 Requirements
@@ -32,8 +32,8 @@ Example
 -------
 
 The file **test.py**
-contains an examples that illustrate how to use the code to detect the 
-centromere location of chromosome 01 of the *Oryza sativa* Indica Group cultivar:IR64.
+contains an example that illustrates how to use the code to detect the 
+centromere location in chromosome 01 of the *Oryza sativa* Indica Group cultivar:IR64.
 Other IR64 chromosome sequences are available in the 
 `NCBI Genome database <https://www.ncbi.nlm.nih.gov/genome>`_
 under the accession number RWKJ00000000.
