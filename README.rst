@@ -79,8 +79,8 @@ The above prints the following::
   Approximate location of centromere:
   Window number: 178
   Window midpoint (base pair): 17850000
-  2Mbp centromeric region prediction: [15850000,19850000]
-  3Mbp centromeric region prediction: [14850000,20850000]
+  2Mbp centromeric region prediction: [16850000,18850000]
+  3Mbp centromeric region prediction: [16350000,19350000]
 
 Plot the results
 

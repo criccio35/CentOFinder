@@ -144,10 +144,10 @@ class CentOFinder():
         print('Approximate location of centromere:')
         print('Window number: {0}'.format(self.c_window_number))
         print('Window midpoint (base pair): {0}'.format(self.c_midpoint))
-        print('2Mbp centromeric region prediction: [{0},{1}]'.format(self.c_midpoint-2_000_000,
-                                                                     self.c_midpoint+2_000_000))
-        print('3Mbp centromeric region prediction: [{0},{1}]'.format(self.c_midpoint-3_000_000,
-                                                                     self.c_midpoint+3_000_000))
+        print('2Mbp centromeric region prediction: [{0},{1}]'.format(self.c_midpoint-1_000_000,
+                                                                     self.c_midpoint+1_000_000))
+        print('3Mbp centromeric region prediction: [{0},{1}]'.format(self.c_midpoint-1_500_000,
+                                                                     self.c_midpoint+1_500_000))
     
     
     def plot_CentO_frequency(self,color='dodgerblue',label='CentO frequency'):
@@ -162,13 +162,13 @@ class CentOFinder():
         :type label: string
         '''
         fig, ax = plt.subplots(figsize=(15,4))
-        ax.axvline(x=np.digitize(self.c_midpoint-2_000_000,self.wbp,right=False)-1,
+        ax.axvline(x=np.digitize(self.c_midpoint-1_000_000,self.wbp,right=False)-1,
                    linestyle='--',color='red',label='2Mbp centromeric region')
-        ax.axvline(x=np.digitize(self.c_midpoint+2_000_000,self.wbp,right=False)-1,
+        ax.axvline(x=np.digitize(self.c_midpoint+1_000_000,self.wbp,right=False)-1,
                    linestyle='--',color='red')
-        ax.axvline(x=np.digitize(self.c_midpoint-3_000_000,self.wbp,right=False)-1,
+        ax.axvline(x=np.digitize(self.c_midpoint-1_500_000,self.wbp,right=False)-1,
                    linestyle='--',color='green',label='3Mbp centromeric region')
-        ax.axvline(x=np.digitize(self.c_midpoint+3_000_000,self.wbp,right=False)-1,
+        ax.axvline(x=np.digitize(self.c_midpoint+1_500_000,self.wbp,right=False)-1,
                    linestyle='--',color='green')
         
         ax.plot(self.CentO_freq,label=label,lw=2,color=color)
