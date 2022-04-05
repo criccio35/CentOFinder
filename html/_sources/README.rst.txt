@@ -5,7 +5,13 @@ CentOFinder
 -----------
 
 This is a Python3 implementation to predict the centromere of rice chromosomes using CentO sequences.
-
+The CentOFinder module takes as input a fasta file with a rice chromosome sequence, 
+divide the chromosome into windows of the length indicated by the user (Kbp windows are usually used),
+aligns the CentO sequence in the chromosome using the BLAST algorithm,
+and detects de window with highest frecuency of CentO alignments.
+As in rice the centromere is usually a region between 2 and 3 Mbp, the module predicts a centromeric
+region for each of these longitudes based on the midpoint of the window with the highest frequency 
+of CentO alignments.
 
 Setup
 ------
@@ -52,11 +58,9 @@ Input chromosome fasta file path::
 
   chromosome_path = 'input_data/Osat_IR64_AGI_NSD_chrOK.id_chr01.fasta'
 
-Input window size. A window size between 2 to 3 Mbp is recommended since
-the size of the centromeric region of rice oscillates in this range, 
-being different for each chromosome::
+Input window size::
 
-  size_w = 200_000
+  size_w = 100_000
 
 Instantiate the CentOFinder class::
 
@@ -69,14 +73,16 @@ Call the method to detect the centromere::
 The above prints the following::
 
   Chromosome length: 44350042 base pairs
-  Window size: 200000
-  Total chromosome whindows: 221
+  Window size: 100000
+  Total chromosome whindows: 443
   ----------------------------------------
   Approximate location of centromere:
-  Window number: 86
-  Window interval (base pairs): [17200000,17400000]
+  Window number: 178
+  Window midpoint (base pair): 17850000
+  2Mbp centromeric region prediction: [15850000,19850000]
+  3Mbp centromeric region prediction: [14850000,20850000]
 
-Plot the result
+Plot the results
 
 .. image:: Osat_IR64_chr01.png
   :width: 800

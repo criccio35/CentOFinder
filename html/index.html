@@ -52,7 +52,14 @@
 </ul>
 <section id="centofinder">
 <h2>CentOFinder<a class="headerlink" href="#centofinder" title="Permalink to this headline">¶</a></h2>
-<p>This is a Python3 implementation to predict the centromere of rice chromosomes using CentO sequences.</p>
+<p>This is a Python3 implementation to predict the centromere of rice chromosomes using CentO sequences.
+The CentOFinder module takes as input a fasta file with a rice chromosome sequence,
+divide the chromosome into windows of the length indicated by the user (Kbp windows are usually used),
+aligns the CentO sequence in the chromosome using the BLAST algorithm,
+and detects de window with highest frecuency of CentO alignments.
+As in rice the centromere is usually a region between 2 and 3 Mbp, the module predicts a centromeric
+region for each of these longitudes based on the midpoint of the window with the highest frequency
+of CentO alignments.</p>
 </section>
 <section id="setup">
 <h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
@@ -95,10 +102,8 @@ under the accession number RWKJ00000000.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">chromosome_path</span> <span class="o">=</span> <span class="s1">&#39;input_data/Osat_IR64_AGI_NSD_chrOK.id_chr01.fasta&#39;</span>
 </pre></div>
 </div>
-<p>Input window size. A window size between 2 to 3 Mbp is recommended since
-the size of the centromeric region of rice oscillates in this range,
-being different for each chromosome:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">size_w</span> <span class="o">=</span> <span class="mi">200_000</span>
+<p>Input window size:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">size_w</span> <span class="o">=</span> <span class="mi">100_000</span>
 </pre></div>
 </div>
 <p>Instantiate the CentOFinder class:</p>
@@ -111,15 +116,17 @@ being different for each chromosome:</p>
 </div>
 <p>The above prints the following:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Chromosome</span> <span class="n">length</span><span class="p">:</span> <span class="mi">44350042</span> <span class="n">base</span> <span class="n">pairs</span>
-<span class="n">Window</span> <span class="n">size</span><span class="p">:</span> <span class="mi">200000</span>
-<span class="n">Total</span> <span class="n">chromosome</span> <span class="n">whindows</span><span class="p">:</span> <span class="mi">221</span>
+<span class="n">Window</span> <span class="n">size</span><span class="p">:</span> <span class="mi">100000</span>
+<span class="n">Total</span> <span class="n">chromosome</span> <span class="n">whindows</span><span class="p">:</span> <span class="mi">443</span>
 <span class="o">----------------------------------------</span>
 <span class="n">Approximate</span> <span class="n">location</span> <span class="n">of</span> <span class="n">centromere</span><span class="p">:</span>
-<span class="n">Window</span> <span class="n">number</span><span class="p">:</span> <span class="mi">86</span>
-<span class="n">Window</span> <span class="n">interval</span> <span class="p">(</span><span class="n">base</span> <span class="n">pairs</span><span class="p">):</span> <span class="p">[</span><span class="mi">17200000</span><span class="p">,</span><span class="mi">17400000</span><span class="p">]</span>
+<span class="n">Window</span> <span class="n">number</span><span class="p">:</span> <span class="mi">178</span>
+<span class="n">Window</span> <span class="n">midpoint</span> <span class="p">(</span><span class="n">base</span> <span class="n">pair</span><span class="p">):</span> <span class="mi">17850000</span>
+<span class="mi">2</span><span class="n">Mbp</span> <span class="n">centromeric</span> <span class="n">region</span> <span class="n">prediction</span><span class="p">:</span> <span class="p">[</span><span class="mi">15850000</span><span class="p">,</span><span class="mi">19850000</span><span class="p">]</span>
+<span class="mi">3</span><span class="n">Mbp</span> <span class="n">centromeric</span> <span class="n">region</span> <span class="n">prediction</span><span class="p">:</span> <span class="p">[</span><span class="mi">14850000</span><span class="p">,</span><span class="mi">20850000</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>Plot the result</p>
+<p>Plot the results</p>
 <a class="reference internal image-reference" href="_images/Osat_IR64_chr01.png"><img alt="_images/Osat_IR64_chr01.png" src="_images/Osat_IR64_chr01.png" style="width: 800px;" /></a>
 </section>
 </section>
@@ -140,10 +147,14 @@ based on the frequency of CentO sequences.</p>
 <span class="sig-name descname"><span class="pre">detect_centromere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CentOFinder.CentOFinder.detect_centromere" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the frequency of CentO alignments per window, 
 the window number with the highest frequency, 
-and the corresponding window interval in base pairs.</p>
+and the corresponding 2Mbp and 3Mbp centromeric region prediction.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>verbose</strong> (<em>bool</em>) – If True print information about the results. Default to True.</p>
+<dd class="field-odd"><p><strong>verbose</strong> (<em>bool</em>) – If True print information about the results, 
+i.e., chromosome length, window size, Total chromosome windows,
+window with highest CentO frequency, window midpoint and 
+centromeric region prediction of 2Mbp and 3Mbp.
+Default to True.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -152,7 +163,8 @@ and the corresponding window interval in base pairs.</p>
 <dt class="sig sig-object py" id="CentOFinder.CentOFinder.plot_CentO_frequency">
 <span class="sig-name descname"><span class="pre">plot_CentO_frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dodgerblue'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CentO</span> <span class="pre">frequency'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CentOFinder.CentOFinder.plot_CentO_frequency" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the frequency of base pairs belonging to a CentO alignment for
-each window of the chromosome.</p>
+each window of the chromosome. Also displays the predicted centromeric region
+of 2Mbp and 3Mbp.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

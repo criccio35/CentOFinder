@@ -122,14 +122,20 @@ class CentOFinder():
         '''
         Computes the frequency of CentO alignments per window, 
         the window number with the highest frequency, 
-        and the corresponding window interval in base pairs.
+        and the corresponding 2Mbp and 3Mbp centromeric region prediction.
         
-        :param verbose: If True print information about the results. Default to True.
+        :param verbose: If True print information about the results, 
+            i.e., chromosome length, window size, Total chromosome windows,
+            window with highest CentO frequency, window midpoint and 
+            centromeric region prediction of 2Mbp and 3Mbp.
+            Default to True.
         :type verbose: bool
         '''
         self._CentO_frequency()
         self.c_window_number = np.where(self.CentO_freq == max(self.CentO_freq))[0][0]
-        self.c_window_interval = (self.c_window_number*self.size_w, (self.c_window_number+1)*self.size_w)
+        w_start = self.c_window_number*self.size_w
+        w_end = (self.c_window_number+1)*self.size_w
+        self.c_midpoint = (w_start + w_end)//2
         
         print('Chromosome length: {0} base pairs'.format(self.chromosome_length))
         print('Window size: {0}'.format(self.size_w))
@@ -137,14 +143,18 @@ class CentOFinder():
         print('----------------------------------------')
         print('Approximate location of centromere:')
         print('Window number: {0}'.format(self.c_window_number))
-        print('Window interval (base pairs): [{0},{1}]'.format(self.c_window_interval[0],
-                                                                   self.c_window_interval[1]))
+        print('Window midpoint (base pair): {0}'.format(self.c_midpoint))
+        print('2Mbp centromeric region prediction: [{0},{1}]'.format(self.c_midpoint-2_000_000,
+                                                                     self.c_midpoint+2_000_000))
+        print('3Mbp centromeric region prediction: [{0},{1}]'.format(self.c_midpoint-3_000_000,
+                                                                     self.c_midpoint+3_000_000))
     
     
     def plot_CentO_frequency(self,color='dodgerblue',label='CentO frequency'):
         '''
         Plot the frequency of base pairs belonging to a CentO alignment for
-        each window of the chromosome.
+        each window of the chromosome. Also displays the predicted centromeric region
+        of 2Mbp and 3Mbp.
         
         :param color: color of the line that represents the frequency of alignments
         :type color: string
@@ -152,8 +162,17 @@ class CentOFinder():
         :type label: string
         '''
         fig, ax = plt.subplots(figsize=(15,4))
-        ax.axvline(x=self.total_windows//4,linestyle='--',color='gray')
+        ax.axvline(x=np.digitize(self.c_midpoint-2_000_000,self.wbp,right=False)-1,
+                   linestyle='--',color='red',label='2Mbp centromeric region')
+        ax.axvline(x=np.digitize(self.c_midpoint+2_000_000,self.wbp,right=False)-1,
+                   linestyle='--',color='red')
+        ax.axvline(x=np.digitize(self.c_midpoint-3_000_000,self.wbp,right=False)-1,
+                   linestyle='--',color='green',label='3Mbp centromeric region')
+        ax.axvline(x=np.digitize(self.c_midpoint+3_000_000,self.wbp,right=False)-1,
+                   linestyle='--',color='green')
+        
         ax.plot(self.CentO_freq,label=label,lw=2,color=color)
+        
         #---plot customization-----------------------------------------------------------
         ax.set_xlabel('Chromosome length (x{0}bp)'.format(self.size_w), fontsize=20)
         ax.set_ylabel('Count', fontsize=20)
